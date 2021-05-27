@@ -85,7 +85,7 @@ public class TestFalsePositive {
 	}
 	
 	private static void folderEntry(){
-		final File folder = new File("s01");
+		final File folder = new File("C:\\Users\\Djones\\Desktop\\Java\\src\\testcases\\CWE89_SQL_Injection\\s01");
 		listFilesForFolder(folder);
 	}
 	
