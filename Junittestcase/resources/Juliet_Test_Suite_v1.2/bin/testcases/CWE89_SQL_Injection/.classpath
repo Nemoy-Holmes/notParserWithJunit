@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="s01/antbuild/testcases/CWE89_SQL_Injection/s01"/>
+	<classpathentry excluding="s02/" kind="src" path="s02/antbuild/testcases/CWE89_SQL_Injection"/>
+	<classpathentry kind="src" path="s02/antbuild/testcases/CWE89_SQL_Injection/s02"/>
+	<classpathentry excluding="s03/" kind="src" path="s03/antbuild/testcases/CWE89_SQL_Injection"/>
+	<classpathentry kind="src" path="s03/antbuild/testcases/CWE89_SQL_Injection/s03"/>
+	<classpathentry excluding="s04/" kind="src" path="s04/antbuild/testcases/CWE89_SQL_Injection"/>
+	<classpathentry kind="src" path="s04/antbuild/testcases/CWE89_SQL_Injection/s04"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
