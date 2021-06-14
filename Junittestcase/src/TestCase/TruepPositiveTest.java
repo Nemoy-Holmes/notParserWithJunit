@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -16,7 +17,7 @@ public class TruepPositiveTest {
 	
 	
 	final File javaFolderPath = new File("C:\\Users\\Djones\\Desktop\\Java\\src\\testcases\\CWE89_SQL_Injection\\s01");
-	final File xmlFilePath = new File("C:\\Users\\Djones\\Desktop\\-Findings-List.xml");
+	final File xmlFilePath = new File("C:\\Users\\Djones\\Downloads\\S01-Findings-List (1).xml");
 	final String javaFilePath = "";
 	
 	private final boolean compareMaps() {
@@ -39,8 +40,17 @@ public class TruepPositiveTest {
 			javaExtraKeys.addAll(javaFileFilterMap.keySet());
 			javaExtraKeys.removeAll(xmlFileMap.keySet());
 			
-			System.out.println("Following files are in folder but not in xml file "+ javaExtraKeys);
-			System.out.println("Following files are in xml file but not in folder "+ xmlExtraKeys);
+			Iterator<String> itrJavaFolder = javaExtraKeys.iterator();
+			Iterator<String> itrXmlFile = xmlExtraKeys.iterator();
+			
+			System.out.println("Following files are in java folder but not in xml file :");
+			while(itrJavaFolder.hasNext()) {
+				System.out.println(itrJavaFolder.next()) ;
+			}
+			System.out.println("Following files are in xml file but not in folder :");
+			while(itrXmlFile.hasNext()) {
+				System.out.println(itrXmlFile.next()) ;
+			}
 			
 			return false;
 		}

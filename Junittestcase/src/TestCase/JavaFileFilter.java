@@ -31,26 +31,23 @@ public class JavaFileFilter {
 	}
 	
 	private final Map<String, String> listFilesForFolder(final File folder) {
-		//int numberOfBad = 0;
-		//int numberOfBadSource = 0;
-		//int numberOfBadSink = 0;
-		//int numberOfBadWord = 0;
-		//int numberOfFiles = 0;
-		//int numberOfJavaFiles = 0;
+		
 		final String searchWordbad = "bad";
 		final String searchKeywordbad = "bad()";
 		final String searchKeywordbadSource = "badSource()";
 		Map<String, String> javaFileFilterMap = new HashMap<String, String>();
-		
+		int uniqueValue = 0;
 		for(final File fileEntry : folder.listFiles()) {
-			//numberOfFiles += 1; 
+			
+			
 			if(fileEntry.isDirectory()) {
 				listFilesForFolder(fileEntry);
 			}
 			else {
 				if(fileEntry.getName().toLowerCase().endsWith(".java"))
 				{
-					//numberOfJavaFiles += 1;
+					uniqueValue += 1;
+					
 					String content = null;
 					try {
 						content = readFile(fileEntry);
@@ -61,18 +58,18 @@ public class JavaFileFilter {
 					if(content.indexOf(searchKeywordbad) != -1 ) {
 						//System.out.println(fileEntry.getName());
 						//numberOfBad += 1 ; 
-						javaFileFilterMap.put(fileEntry.getName(), "bad()");
+						javaFileFilterMap.put(fileEntry.getName(), "bad()" + uniqueValue);
 						}	
 					else if(content.indexOf(searchKeywordbadSource) != -1 ) {
 						//System.out.println(fileEntry.getName());
 						//numberOfBadSource += 1 ; 
-						javaFileFilterMap.put(fileEntry.getName(), "badSource()");
+						javaFileFilterMap.put(fileEntry.getName(), "badSource()" + uniqueValue);
 						}
 						
 					else if(content.indexOf(searchWordbad) != -1 ) {
 						//System.out.println(fileEntry.getName());
 						//numberOfBadWord += 1 ; 
-						javaFileFilterMap.put(fileEntry.getName(), "bad keyword");
+						javaFileFilterMap.put(fileEntry.getName(), "bad keyword" + uniqueValue);
 						}
 					
 				}
@@ -84,12 +81,7 @@ public class JavaFileFilter {
 			return null;
 		}
 		else {
-			//System.out.println("This directory has: "+numberOfBad+ " bad methods.");
-			//System.out.println("This directory has: "+numberOfBadSource+ " bad source methods.");
-			//System.out.println("This directory has: "+numberOfBadSink+ " bad sink methods.");
-			//System.out.println("This directory has: "+numberOfBadWord+ " bad keyword.");
-			//System.out.println("This directory has: "+numberOfJavaFiles+ " number Of JavaFiles.");
-			//System.out.println("This directory has: "+numberOfFiles+ " number Of Files.");
+			
 			return javaFileFilterMap;
 		}
 		 

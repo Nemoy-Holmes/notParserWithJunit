@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,17 +26,16 @@ public class XmlFileParser {
 	
 	final Map<String, String> readXML(final File xmlFilString) {
 		Document dom; 
-		
+		Map<String, String> findingsMap = new HashMap<String, String>();  
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		if(xmlFilString.getName().toLowerCase().endsWith(".xml")) {
-			String content = null;
+		
 			try {
-				content = readFile(xmlFilString);
+				//content = readFile(xmlFilString);
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				dom = db.parse(content);
+				dom = db.parse(xmlFilString.toURI().toString());
 				Element doc = dom.getDocumentElement();
-				Map<String, String> findingsMap = new HashMap<String, String>();  
-				findingsMap.putAll(getXmlValue(doc, "finding"));
+				findingsMap.putAll(getXmlValue(doc));
 				return findingsMap;
 			} catch (ParserConfigurationException pce) {
 				System.out.println(pce.getMessage());
@@ -46,49 +46,59 @@ public class XmlFileParser {
 			}
 		}
 		
-		return null;
+		return findingsMap;
 	}
 	
-	private final Map<String, String> getXmlValue(Element doc, String tag) {
+	private final Map<String, String> getXmlValue(Element doc) {
+		final String findingTag = "finding";
+		final String fileTag = "file";
+		final String methodTag = "method";
 		String valueFileName;
-		String valueProblemType;
-		NodeList nl;
-		nl = doc.getElementsByTagName(tag);
+		String valueMethodName;
+		NodeList nl; 
+		nl = doc.getElementsByTagName(findingTag);
 		final int nodeLength = nl.getLength();
 		Map<String, String> xmlFileMap = new HashMap<String, String>();
 		if(nodeLength > 0  && nl.item(0).hasChildNodes() )  {
 			for(int i = 0; i < nl.getLength(); ++i)
 			{
-				////// Cannot access XML elements
-				valueFileName = nl.item(i).getChildNodes().item(12).getNodeValue();
-				valueProblemType = nl.item(i).getChildNodes().item(0).getNodeValue();
-				xmlFileMap.put(valueFileName, valueProblemType);
+				NodeList subNode = nl.item(i).getChildNodes();
+				if(subNode != null && subNode.getLength() > 0) {
+					NodeList nodeFile =  ((Element) subNode).getElementsByTagName(fileTag);
+					NodeList nodeMethod = ((Element) subNode).getElementsByTagName(methodTag);
+					
+					if(nodeFile != null && nodeFile.getLength() > 0 ) {
+						valueFileName = nodeFile.item(0).getChildNodes().item(0).getNodeValue().toString();
+					}
+					else {
+						valueFileName = "File name not found in XML file.";
+					}
+					if(nodeMethod != null && nodeMethod.getLength() > 0 ) {
+						valueMethodName = nodeMethod.item(0).getChildNodes().item(0).getNodeValue().toString();
+					}
+					else {
+						valueMethodName = "File name not found in XML file.";
+					}
+					
+					xmlFileMap.put(valueFileName, valueMethodName);
+					
+				}
+				
+				
+				
 			}
 			
+		}
+		else {
+			xmlFileMap = Collections.emptyMap();
 		}
 		return xmlFileMap;
 	}
 	
-	private static String readFile( File xmlFilePath) throws IOException {
-		StringBuilder inputStringBuilder = new StringBuilder();
-		InputStream inputFileData = new FileInputStream(xmlFilePath);
-		String inputFileLine;
-		BufferedReader inputFileBufferedReader = new BufferedReader(new InputStreamReader(inputFileData));
-		try {
-			while((inputFileLine = inputFileBufferedReader.readLine()) != null) {
-				inputStringBuilder.append(inputFileLine + System.lineSeparator());
-			}
-		}
-		finally {
-			inputFileBufferedReader.close();
-			
-			
-		}
-		return inputStringBuilder.toString();
-	}
+	
 	@Test
 	void test() {
-		final File xmlFilePath = new File("C:\\Users\\Djones\\Desktop\\-Findings-List.xml");
+		final File xmlFilePath = new File("C:\\Users\\Djones\\Downloads\\S01-Findings-List (1).xml");
 		Map<String, String> xmlFileMap = new HashMap<String, String>();
 		xmlFileMap.putAll(readXML(xmlFilePath));
 		if(xmlFileMap.size() == 0) {
